@@ -10,6 +10,15 @@ MacPad has two parts:
 
 > The app interface is currently in Italian.
 
+<p align="center">
+  <img src="docs/screenshots/trackpad.png" width="260" alt="Trackpad with media and shortcut bars">
+  &nbsp;&nbsp;
+  <img src="docs/screenshots/pairing.png" width="260" alt="Pairing screen listing nearby Macs">
+</p>
+<p align="center">
+  <img src="docs/screenshots/keyboard.png" width="720" alt="Full Mac keyboard in landscape">
+</p>
+
 ## Features
 - Trackpad with click, scrolling (optional inertia) and three‑finger gestures (Mission Control, switch desktops)
 - Keyboard, plus a full landscape keyboard that sends physical key codes (Italian – Pro layout labels)
@@ -59,6 +68,7 @@ Download `MacPad-x.y-unsigned.ipa` from [Releases](../../releases/latest) and in
 - `Mac/` – menu‑bar host. It is not sandboxed and injects events with `CGEvent`.
 - `Shared/` – protocol (one JSON line per `Message`) and the TLS‑PSK channel
 - `Design/` – Swift scripts that draw the app icons
+- Demo mode (Debug builds only), used for the screenshots: launch the iPhone app with `-demo` (connected to a fake Mac, add `-demoLandscape` for landscape) or `-demoPairing`.
 
 ## License
 [MIT](LICENSE)

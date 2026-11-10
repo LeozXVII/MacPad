@@ -25,13 +25,40 @@ final class RemoteClient: ObservableObject {
     private var retry: DispatchWorkItem?
     private var running = false
 
+    #if DEBUG
+    /// Modalità demo per gli screenshot del README, solo nelle build di debug.
+    /// `-demo`: un Mac finto già collegato (`-demoLandscape` per l'orizzontale). `-demoPairing`: un Mac finto in attesa di abbinamento.
+    private let demoMode: Bool
+
+    init() {
+        let args = ProcessInfo.processInfo.arguments
+        demoMode = args.contains("-demo") || args.contains("-demoPairing")
+        if args.contains("-demo") {
+            pairedMac = "MacBook Pro"
+            status = .connected
+            if args.contains("-demoLandscape") {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+                    scene?.requestGeometryUpdate(.iOS(interfaceOrientations: .landscapeRight))
+                }
+            }
+        } else if args.contains("-demoPairing") {
+            pairedMac = nil
+            macsInPairing = [FoundMac(name: "MacBook Pro", endpoint: .hostPort(host: "demo.local", port: 1))]
+        }
+    }
+    #else
+    private let demoMode = false
+    #endif
+
     func start() {
-        guard !running else { return }
+        guard !running, !demoMode else { return }
         running = true
         if pairedMac != nil { connect() } else { browseForPairing() }
     }
 
     func stop() {
+        guard !demoMode else { return }
         running = false
         retry?.cancel()
         session?.cancel()
